@@ -10,6 +10,8 @@ public class dataAccessManagement implements databaseOperations{
 
         databaseConnection = new DatabaseConnection(args);
         statement = databaseConnection.connect.createStatement();
+        createCompanyTable();
+        createCarTable();
     }
 
     @Override
@@ -18,14 +20,29 @@ public class dataAccessManagement implements databaseOperations{
     }
 
     @Override
-    public void addCompany(Company company) throws SQLException {
-        String addCompanyQuery = "INSERT INTO COMPANY (NAME) VALUES(" + "'" + company.getName() + "')";
-        statement.executeUpdate(addCompanyQuery);
-
+    public ResultSet getCompanyCarList(Company company) throws SQLException {
+        return statement.executeQuery("SELECT * FROM CAR " +
+                "WHERE COMPANY_ID = (SELECT ID FROM COMPANY WHERE NAME = " + "'" + company.getName() + "')");
     }
 
     @Override
-    public void createTable() throws SQLException {
+    public void addCompany(Company company) throws SQLException {
+        String addCompanyQuery = "INSERT INTO COMPANY (NAME) VALUES(" + "'" + company.getName() + "')";
+        statement.executeUpdate(addCompanyQuery);
+    }
+
+    @Override
+    public void addCar(Company company, Car car) throws SQLException {
+        String addCarQuery = "INSERT INTO CAR (NAME,COMPANY_ID) VALUES(" + "'" + car.getName() + "',"
+                + "(SELECT ID FROM COMPANY WHERE NAME = "+ "'" + company.getName() + "'))";
+        statement.executeUpdate(addCarQuery);
+    }
+
+    @Override
+    public void createCompanyTable() throws SQLException {
+
+         statement.executeUpdate("DROP TABLE CAR");
+         statement.executeUpdate("DROP TABLE COMPANY");
 
         String createCompanyQuery = "CREATE TABLE IF NOT EXISTS COMPANY (" +
                 "ID INTEGER AUTO_INCREMENT NOT NULL, " +
@@ -33,5 +50,18 @@ public class dataAccessManagement implements databaseOperations{
                 "PRIMARY KEY(ID))";
         statement.executeUpdate(createCompanyQuery);
 
+        statement.executeUpdate("ALTER TABLE company ALTER COLUMN id RESTART WITH 1");
+    }
+
+    @Override
+    public void createCarTable() throws SQLException {
+
+        String createCarQuery = "CREATE TABLE IF NOT EXISTS CAR (" +
+                "ID INT AUTO_INCREMENT," +
+                "NAME VARCHAR(20) NOT NULL UNIQUE," +
+                "COMPANY_ID INT NOT NULL, " +
+                "PRIMARY KEY (ID)," +
+                "FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY(ID))";
+        statement.executeUpdate(createCarQuery);
     }
 }

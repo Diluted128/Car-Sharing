@@ -9,13 +9,15 @@ Program simulating renting cars by the carsharing company based on H2 database. 
 In this project was used Data Access Object pattern. More info [here](https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm).
 
 ![Untitled Diagram](https://user-images.githubusercontent.com/67759414/127780975-c5108695-7f6d-411a-9b7e-0dbe6870011b.png)
-'Database operations' interface is Data Access Object Interface.
 
-'Data Access Management' is Data Access Object concrete class. This class is responsible to get data from a database. 
+`Database operations` interface is Data Access Object Interface.
 
-'Company','Customer', 'Car' are Object Value Classes.
+`Data Access Management` is Data Access Object concrete class. This class is responsible to get data from a database. 
 
-'Database Connection' is a separated class to get connection with already created database.
+`Company`,`Customer`, `Car` are Object Value Classes.
+
+`Database Connection` is a separated class to get connection with already created database.
+
 ## Database structure
 ![Untitled Diagram](https://user-images.githubusercontent.com/67759414/127780222-da4d8780-6f5c-4768-9597-ba9e3a437d95.jpg)
 ## Note
